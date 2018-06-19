@@ -104,11 +104,11 @@
 
         <form action="/survey">
                 <div class="input-field col s6">
-                        <input id="name" type="text" class="validate">
+                        <input id="name" type="text" class="form-control">
                         <label for="name">Full Name</label>
                       </div>
                       <div class="input-field col s6">
-                            <input id="image" type="text" class="validate" required>
+                            <input id="image" type="text" class="form-control" required>
                             <label for="image">Image Link</label>
                           </div>
             <div>
@@ -189,10 +189,23 @@
 
 
     <script>
-    $(document).ready(function(){
+   
         $(".submitter").on("click", function(event) {
       event.preventDefault();
         
+      function validateForm(){
+          var isValid = true;
+          $(".form-control").each(function(){
+              if($(this).val()===""){
+                  isValid = false;
+              }
+          })
+          return isValid;
+      };
+
+      if (validateForm()){
+          
+      
       
       // Here we grab the form elements
       var newFriend = {
@@ -214,33 +227,32 @@
 
 $.post("/api/friends", newFriend,
         function(data) {
-            console.log(data);
+            // console.log(data);
             $("#dinnderName").text(data.name);
              $("#dinnderImage").attr("src", data.photo);
 
+
+              $('.modal').modal();
+         $('#modal1').modal('open');
         });
 
-         $('.modal').modal();
-         $('#modal1').modal('open');
+       
 
-          // Clear the form when submitting
-          $("#name").val("");
-          $("#image").val("");
-          $("#one").val("");
-          $("#two").val("");
-          $("#three").val("");
-          $("#four").val("");
-          $("#five").val("");
-          $("#six").val("");
-          $("#seven").val("");
-          $("#eight").val("");
-          $("#nine").val("");
-          $("#ten").val("");
+          
 
-      
+    }else{
+    alert("Type your info in, you don't want to be alone forever.")
+}  
+
+
+// Clear the form when submitting
 
     });
-});
+
+
+
+
+
 
 
 
@@ -251,3 +263,4 @@ $.post("/api/friends", newFriend,
 </body>
 
 </html>
+
