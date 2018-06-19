@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
     <style>
         nav {
             background-color: #FF0000;
@@ -107,85 +108,92 @@
                         <label for="name">Full Name</label>
                       </div>
                       <div class="input-field col s6">
-                            <input id="image" type="text" class="validate">
+                            <input id="image" type="text" class="validate" required>
                             <label for="image">Image Link</label>
                           </div>
             <div>
-                <p class="question">1. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">1. How important is food to you? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="one" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">2. How much do you love bacon? (Low 1 - High 5)</p>
+                <p class="question">2. How much do you love bacon? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="two" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">3. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">3. Was Anthony Bourdain important in the way you approach food? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="three" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">4. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">4. Is Yelp important when it comes to making food decisions? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="four" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">5. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">5. Rate your cooking skillz (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="five" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">6. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">6. How much does Andrew Zimmerman gross you out? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="six" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">7. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">7. Rate the grossness of Mario Batali? (Very Low 1 - Very High 5)</p>
                 <p class="range-field">
                     <input type="range" id="seven" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">8. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">8. Are French Fries French? (Strongly Disagree 1 - Strongly Agree 5)</p>
                 <p class="range-field">
                     <input type="range" id="eight" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">9. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">9. Is food more important to you than your family? (Strongly Disagree 1 - Strongly Agree 5)</p>
                 <p class="range-field">
                     <input type="range" id="nine" min="1" max="5" />
                 </p>
             </div>
             <div>
-                <p class="question">10. How much do you love food? (Low 1 - High 5)</p>
+                <p class="question">10. Is Jeffrey Lee the sexiest person ever?...It's my survey, shut up (Agree a lot 5 - Oh hell yes I agree 5)</p>
                 <p class="range-field">
-                    <input type="range" id="ten" min="1" max="5" />
+                    <input type="range" id="ten" min="5" max="5" />
                 </p>
             </div>
-            <button class="btn waves-effect waves-light red submitter" type="submit" name="action">Submit
+            <button class="btn waves-effect waves-light red submitter btn modal-trigger" type="submit" name="action">Submit
                     <i class="material-icons right">send</i>
                 </button>
         </form>
     </div>
-
+    <div id="modal1" class="modal">
+            <div class="modal-content">
+              <h4>Meet Your Dinnder Date</h4>
+              <h5 id="dinnderName"></h5>
+              <img id="dinnderImage" alt="Too ugly to post a photo">
+            </div>
+          <div class="modal-footer">
+            <a href="/"  class="modal-action modal-close waves-effect waves-white btn-flat red text-white">Done</a>
+          </div>
+        </div>
 
 
     <script>
-        $(document).ready(function () {
-            $('.parallax').parallax();
-        });
-
+    $(document).ready(function(){
         $(".submitter").on("click", function(event) {
       event.preventDefault();
-
+        
+      
       // Here we grab the form elements
       var newFriend = {
         name: $("#name").val().trim(),
@@ -202,10 +210,18 @@
         $("#ten").val().trim()              
     ]
       };
-      console.log(newFriend);
+     
 
 $.post("/api/friends", newFriend,
         function(data) {
+            console.log(data);
+            $("#dinnderName").text(data.name);
+             $("#dinnderImage").attr("src", data.photo);
+
+        });
+
+         $('.modal').modal();
+         $('#modal1').modal('open');
 
           // Clear the form when submitting
           $("#name").val("");
@@ -221,10 +237,10 @@ $.post("/api/friends", newFriend,
           $("#nine").val("");
           $("#ten").val("");
 
-        });
+      
 
     });
-
+});
 
 
 
